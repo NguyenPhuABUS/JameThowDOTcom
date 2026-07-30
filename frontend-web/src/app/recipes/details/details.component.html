@@ -1,0 +1,221 @@
+<style>
+    .comments_area {
+        margin-top: 50px;
+    }
+
+    .comments_area h4 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .single_comment {
+        display: flex;
+        margin-bottom: 20px;
+    }
+
+    .comment_thumb {
+        margin-right: 20px;
+    }
+
+    .comment_thumb img {
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+    }
+
+    .comment_details h5 {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+
+    .comment_details p {
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 5px;
+    }
+
+    .comment_details .date {
+        font-size: 12px;
+        color: #a5a5a5;
+    }
+
+    .comment_form {
+        margin-top: 30px;
+    }
+
+    .comment_form h4 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .comment_form .form-group {
+        margin-bottom: 15px;
+    }
+
+    .comment_form .form-control {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-shadow: none;
+    }
+
+    .comment_form .form-control:focus {
+        border-color: #007bff;
+    }
+
+    .comment_form button.btn {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        font-size: 14px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .comment_form button.btn:hover {
+        background-color: #0056b3;
+    }
+
+    .ratings_area {
+        margin-top: 20px;
+    }
+
+    .ratings_area h4 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .single_rating {
+        display: flex;
+        margin-bottom: 20px;
+    }
+
+    .rating_value {
+        font-size: 18px;
+        margin-right: 10px;
+    }
+
+    .average_rating {
+        font-size: 20px;
+        color: #f39c12;
+    }
+</style>
+
+<!-- bradcam_area  -->
+<div class="bradcam_area bradcam_bg_1">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text text-center">
+                    <h3>Recipe Details</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /bradcam_area  -->
+
+<div class="recepie_details_area">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-xl-6 col-md-6">
+                <div class="recepies_thumb">
+                    <img src="{{content.imageUrl}}" alt="{{content.title}}">
+                </div>
+            </div>
+            <div class="col-xl-6 col-md-6">
+                <div class="recepies_info">
+                    <h3>{{content.title}}</h3>
+                    <!-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p> -->
+
+                    <div class="resepies_details">
+                        <ul>
+                            <li>
+                                <!-- <p-rating [(ngModel)]="averageRating" [cancel]="false" [readonly]="true"></p-rating> -->
+                                <p-rating [(ngModel)]="content.rating" [cancel]="false" [readonly]="true"></p-rating>
+                            </li>
+                            <li>
+                                <p><strong>Time</strong> : 30 Mins </p>
+                            </li>
+                            <li>
+                                <p><strong>Category</strong> : {{content.categoryName}} </p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="recepies_text">
+                    <p [innerHTML]="content.content1 | formatContent"></p>
+                </div>
+            </div>
+        </div>
+        <!-- Comment section start -->
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="comments_area">
+                    <h4>Comments</h4>
+                    <div *ngIf="feedbacks && feedbacks.length > 0">
+                        <div *ngFor="let feedback of feedbacks" class="single_comment">
+                            <div class="comment_thumb">
+                                <img src="{{feedback.userAvatar}}" alt="">
+                            </div>
+                            <div class="comment_details">
+                                <h5>{{feedback.username}}</h5>
+                                <p>{{feedback.content}}</p>
+                                <p-rating [(ngModel)]="feedback.rating" [cancel]="false" [readonly]="true"></p-rating>
+                                <span class="date">{{feedback.createdAt}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="comment_form">
+                    <h4>Leave a Comment</h4>
+                    <form [formGroup]="feedbackForm" (ngSubmit)="submit()">
+                        <div class="form-group">
+                            <textarea class="form-control" formControlName="content" rows="4"
+                                placeholder="Your Comment"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <p-rating [(ngModel)]="rating" (onRate)="onRate($event)"></p-rating>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Comment section end -->
+    </div>
+</div>
+<!-- /recepie_area_start  -->
+
+<div class="recepie_area inc_padding">
+    <div class="container">
+        <div class="row">
+            @if (contents != null) {
+            @for (content of contents; track content) {
+            <div class="col-xl-4 col-lg-4 col-md-6">
+                <div class="single_recepie text-center">
+                    <div class="recepie_thumb">
+                        <img src="{{content.imageUrl}}" alt="">
+                    </div>
+                    <h3>{{content.title}}</h3>
+                    <span>{{content.categoryName}}</span>
+                    <p-rating [(ngModel)]="content.rating" [cancel]="false" [readonly]="true"></p-rating>
+                    <p>Date Submitted: {{content.createdAt}}</p>
+                    <a [routerLink]="['/recipes-details', {contentId: content.contentId}]" class="line_btn">View Full
+                        Recipe</a>
+                </div>
+            </div>
+            }
+            }
+        </div>
+    </div>
+</div>
+<!-- /recepie_area_start  -->

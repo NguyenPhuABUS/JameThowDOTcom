@@ -1,0 +1,67 @@
+
+  /* Định dạng container */
+  .container {
+    margin: 20px auto;
+    max-width: 600px;
+    padding: 20px;
+  }
+
+  /* Định dạng nút back */
+  .custom-button {
+    margin-bottom: 10px;
+  }
+
+  /* Định dạng card */
+  .card {
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Định dạng tiêu đề card */
+  .card-header {
+    background-color: #ffc107;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  /* Định dạng phần body của card */
+  .card-body {
+    padding: 20px;
+  }
+
+  /* Định dạng form group */
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  /* Định dạng label */
+  label {
+    font-weight: bold;
+    color: #333;
+  }
+
+  /* Định dạng input */
+  input[type=text] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  /* Định dạng nút submit */
+  .btn-custom {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .btn-custom:hover {
+    background-color: #0056b3;
+  }
+

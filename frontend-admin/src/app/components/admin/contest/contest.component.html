@@ -1,0 +1,184 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+<div class="card">
+    <div class="header-container">
+        <h3>Contest</h3>
+        <div class="flex-container">
+            <div class="search-container">
+                <input type="text" pInputText placeholder="Search" (input)="onGlobalFilter($event)" class="form-control">
+            </div>
+            <button pButton type="button" label="Add New Contest" icon="pi pi-plus" class="p-button-success" (click)="show()"></button>
+        </div>
+    </div>
+
+    <p-table #dt2 dataKey="id" [paginator]="true" [rows]="5" 
+    [value]="contests" [tableStyle]="{'min-width': '60rem'}" [globalFilterFields]="['description','title','startDate','startDate','endDate']">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Contest ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Contestant Win</th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-contest>
+            <tr>
+                <td>{{contest.contestId}}</td>
+                <td><a [routerLink]="['/admin/contestDetails',{contestId: contest.contestId}]">{{contest.title}}</a></td>
+                <td>{{contest.description}}</td>
+                <td>{{contest.startDate}}</td>
+                <td>{{contest.endDate}}</td>
+                <td>
+                    <a *ngIf="contest.winnerUserId" [routerLink]="['/admin/profile', {userId: contest.winnerUserId, contestId: contest.contestId}]">{{contest.account}}</a>
+                </td>
+                <td>
+                    <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="showDialog(contest)"></button>
+                    <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDelete(contest.contestId)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog header="Add New Contest" [(visible)]="display" modal="modal" [closable]="true" [style]="{width: '50vw'}">
+    <form [formGroup]="addcontestForm" (ngSubmit)="submit()">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input id="title" formControlName="title" type="text" pInputText />
+            <div *ngIf="addcontestForm.controls['title'].invalid && (addcontestForm.controls['title'].dirty || addcontestForm.controls['title'].touched)">
+                <small class="p-error">Title is required.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" formControlName="description" rows="3" pInputTextarea></textarea>
+            <div *ngIf="addcontestForm.controls['description'].invalid && (addcontestForm.controls['description'].dirty || addcontestForm.controls['description'].touched)">
+                <small class="p-error">Description is required.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <input id="startDate" formControlName="startDate" type="date" pInputText />
+            <div *ngIf="addcontestForm.controls['startDate'].invalid && (addcontestForm.controls['startDate'].dirty || addcontestForm.controls['startDate'].touched)">
+                <small class="p-error">Start Date is required.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="endDate">End Date</label>
+            <input id="endDate" formControlName="endDate" type="date" pInputText />
+            <div *ngIf="addcontestForm.controls['endDate'].invalid && (addcontestForm.controls['endDate'].dirty || addcontestForm.controls['endDate'].touched)">
+                <small class="p-error">End Date is required.</small>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" pButton label="Add Contest" class="p-button-primary"></button>
+        </div>
+    </form>
+</p-dialog>
+<p-dialog header="Upadte Contest" [(visible)]="updateContestDialog" modal="modal" [closable]="true" [style]="{width: '50vw'}">
+    @if (updateContestForm != null) {
+       <form [formGroup]="updateContestForm" (ngSubmit)="submitEdit()">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input id="title" formControlName="title" type="text" pInputText />
+            <div *ngIf="updateContestForm.controls['title'].invalid && (updateContestForm.controls['title'].dirty || updateContestForm.controls['title'].touched)">
+                <small class="p-error">Title is required.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" formControlName="description" rows="3" pInputTextarea></textarea>
+            <div *ngIf="updateContestForm.controls['description'].invalid && (updateContestForm.controls['description'].dirty || updateContestForm.controls['description'].touched)">
+                <small class="p-error">Description is required.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <input id="startDate" formControlName="startDate" type="date" pInputText />
+            <div *ngIf="updateContestForm.controls['startDate'].invalid && (updateContestForm.controls['startDate'].dirty || updateContestForm.controls['startDate'].touched)">
+                <small class="p-error">Start Date is required.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="endDate">End Date</label>
+            <input id="endDate" formControlName="endDate" type="date" pInputText />
+            <div *ngIf="updateContestForm.controls['endDate'].invalid && (updateContestForm.controls['endDate'].dirty || updateContestForm.controls['endDate'].touched)">
+                <small class="p-error">End Date is required.</small>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" pButton label="Add Contest" class="p-button-primary"></button>
+        </div>
+    </form> 
+    }
+</p-dialog>
+
+<style>
+    .card {
+    margin: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.flex-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-container {
+    flex-grow: 1;
+}
+
+.search-container .form-control {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.p-button-success {
+    white-space: nowrap;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.p-error {
+    color: red;
+}
+
+</style>

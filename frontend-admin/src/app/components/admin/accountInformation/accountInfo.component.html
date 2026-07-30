@@ -1,0 +1,63 @@
+<p-toast></p-toast>
+<div class="search-container">
+    <input type="text" class="form-control" placeholder="Search..." (input)="onGlobalFilter($event)" style="width: 300px; margin: 20px;">
+    
+    <select id="role-select" [(ngModel)]="selectedRoleId" (change)="onRoleChange()">
+        @if(roles != null){
+            @for (role of roles; track role) {  
+                <option  [value]="role.roleId">{{ role.roleName }}</option>
+            }
+        }
+    
+    </select>
+</div>
+<div class="card">
+    <p-table
+        #dt2 dataKey="id"
+        [value]="accounts"
+        [paginator]="true"
+        [rows]="5"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        [rowsPerPageOptions]="[1,2,3]"
+        class="custom-table"
+        [globalFilterFields]="['username','fullName','email','roles','status']"
+    >   
+        <ng-template pTemplate="header">
+            <tr>
+                <th>User_Id</th>
+                <th>Username</th>
+                <th>Avatar</th>
+                <th>FullName</th>
+                <th>Email</th>  
+                <th>Role</th>
+                <th>Status</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-account>
+            <tr>
+                <td >{{account.userId}}</td>
+                <td><a>{{account.username}}</a></td>
+                <td>
+                    <img src="{{account.avatarUrl}}" class="avatar">
+                </td>
+                <td>{{account.fullName}}</td>
+                <td>{{account.email}}</td>
+                <td>{{account.roles}}</td>
+                <td>
+                     <p-checkbox 
+                        [(ngModel)]="account.status" 
+                        binary="true" 
+                        inputId="binary"
+                        (onChange)="onStatusChange(account.username, account.status)" >
+                    ></p-checkbox>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+                <!-- Add any summary content here if needed -->
+            </div>
+        </ng-template>
+    </p-table>
+</div>
+

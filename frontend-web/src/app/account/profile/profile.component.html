@@ -1,0 +1,189 @@
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .bradcam_area {
+        background-color: #333;
+        /* Thay đổi màu nền cho phần bradcam */
+    }
+
+    .bradcam_text {
+        color: white;
+        padding: 20px 0;
+        /* Thêm padding cho phần nội dung bradcam */
+    }
+
+    .register-section {
+        padding: 60px 0;
+    }
+
+    .register-container {
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        width: 100%;
+        /* Đổi kích thước form profile thành 100% */
+        max-width: 400px;
+        /* Giới hạn độ rộng tối đa để form không quá rộng */
+        margin: 0 auto;
+        /* Căn giữa form */
+        text-align: center;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        margin-bottom: 5px;
+        text-align: left;
+    }
+
+    input {
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        width: calc(100% - 22px);
+        /* Điều chỉnh chiều rộng input để không bị đẩy ra ngoài */
+    }
+
+    p {
+        margin-top: 15px;
+    }
+
+    a {
+        color: #007bff;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .contact-info__icon {
+        font-size: 30px;
+        color: #28a745;
+        margin-right: 10px;
+    }
+
+    .media.contact-info {
+        margin-top: 20px;
+    }
+
+    .media-body h3 {
+        margin-bottom: 5px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .media-body p {
+        margin-bottom: 0;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 0.9em;
+        margin-top: -10px;
+        margin-bottom: 10px;
+    }
+</style>
+
+<!-- bradcam_area  -->
+<div class="bradcam_area bradcam_bg_1">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text text-center">
+                    <h3>Profile</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /bradcam_area  -->
+
+<!-- ================ register section start ================= -->
+<section class="register-section section_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="register-title">Your Profile</h2>
+            </div>
+            <div class="col-lg-8">
+                @if (profileForm != null) {
+                    <form class="form-register register_form" [formGroup]="profileForm" (ngSubmit)="save()" id="registerForm" novalidate="novalidate">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <input class="form-control" formControlName="username" name="username" id="username"
+                                        type="text" onfocus="this.placeholder = ''"
+                                        onblur="this.placeholder = 'Enter your username'" placeholder='Enter your username'
+                                        required>
+                                    @if (profileForm.get('username').touched && profileForm.get('username').hasError('required')) {
+                                        <div class="error-message">Username is required.</div>
+                                    }
+                                    @if (profileForm.get('username').touched && profileForm.get('username').hasError('minlength')) {
+                                        <div class="error-message">Username must be at least 3 characters long.</div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <input class="form-control" formControlName="email" name="email" id="email" type="email"
+                                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter email address'"
+                                        placeholder='Enter email address' required>
+                                    @if (profileForm.get('email').touched && profileForm.get('email').hasError('required')) {
+                                        <div class="error-message">Email is required.</div>
+                                    }
+                                    @if (profileForm.get('email').touched && profileForm.get('email').hasError('email')) {
+                                        <div class="error-message">Invalid email address.</div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <input class="form-control" formControlName="fullName" name="fullName" id="fullName"
+                                        type="text" onfocus="this.placeholder = ''"
+                                        onblur="this.placeholder = 'Enter your Fullname'" placeholder='Enter your Fullname'
+                                        required>
+                                    @if (profileForm.get('fullName').touched && profileForm.get('fullName').hasError('required')) {
+                                        <div class="error-message">Full name is required.</div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="profilePicture">Profile Picture</label>
+                                    <input class="form-control-file" type="file" id="profilePicture" name="profilePicture"
+                                        accept="image/*" (change)="selectFile($event)">
+                                        @if (avatarUrl != null) {
+                                            <img id="preview" src="{{avatarUrl}}" alt="Profile Picture"
+                                            style="margin-top: 10px; max-width: 100%; border-radius: 5px;">
+                                        }
+                                        
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <button type="submit" class="button button-registerForm btn_4 boxed-btn">Save</button>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ================ register section end ================= -->

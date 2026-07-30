@@ -1,0 +1,244 @@
+<style>
+  body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+  }
+
+  .bradcam_area {
+      background-color: #333;
+  }
+
+  .bradcam_text {
+      color: white;
+      padding: 20px 0;
+  }
+
+  .register-section {
+      padding: 60px 0;
+  }
+
+  .register-container {
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+  }
+
+  h2 {
+      margin-bottom: 20px;
+      text-align: center;
+  }
+
+  .profile {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+  }
+
+  .profile-sidebar {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #f0f0f0;
+      padding: 20px;
+      border-radius: 10px;
+  }
+  .profile-sidebar input{
+    display: none;
+  }
+  .profile-sidebar label{
+    border-radius: 10px;
+  }
+  .profile-avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+  }
+
+  .profile-content {
+      flex: 2;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+  }
+
+  .profile-form-item {
+      margin-bottom: 10px;
+  }
+
+  .profile-form-item label {
+      font-weight: bold;
+  }
+
+  .profile-form-item input {
+      width: calc(100% - 22px);
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+  }
+
+  .profile-form-item p, .profile-form-item span {
+      margin-top: 6px;
+  }
+
+  .error-message {
+      color: red;
+      font-size: 0.9em;
+      margin-top: -10px;
+      margin-bottom: 10px;
+  }
+
+  .edit-button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+  }
+
+  .edit-button:hover {
+      background-color: #0056b3;
+  }
+  .button-registerForm {
+    background-color: #214e88; /* Màu nền */
+    color: white; /* Màu chữ */
+    border: none; /* Bỏ viền */
+    padding: 10px 20px; /* Khoảng cách bên trong */
+    border-radius: 5px; /* Bo góc */
+    cursor: pointer; /* Con trỏ chuột */
+    text-align: center; /* Canh giữa chữ */
+    display: inline-block; /* Đảm bảo nút nằm trên một dòng */
+    font-size: 1em; /* Kích thước chữ */
+    transition: background-color 0.3s ease; /* Hiệu ứng chuyển đổi màu nền khi hover */
+}
+.mt-3 {
+    margin-top: 20px; /* Khoảng cách phía trên */
+}
+
+.form-group {
+    margin-bottom: 15px; /* Khoảng cách phía dưới */
+}
+.error-message{
+  margin-top: 10px;
+}
+</style>
+
+<section class="register-section section_padding">
+  <div class="container">
+    <div class="register-container">
+      <h2>Your Profile</h2>
+      @if (EditProfileAdminForm != null) {
+      <form [formGroup]="EditProfileAdminForm" (ngSubmit)="save()">
+        <div class="profile">
+          <div class="profile-sidebar">
+            @if (avatarUrl != null) {
+                <img id="preview" [src]="avatarUrl" alt="Profile Picture" class="profile-avatar">
+            }
+            <input class="form-control-file" type="file" id="profilePicture" name="profilePicture" accept="image/*" (change)="selectFile($event)">
+            <label for="profilePicture">Choose file</label>
+          </div>
+          <div class="profile-content">
+            <div class="profile-form-item">
+              <label>Username:</label>
+              <input type="text" formControlName="username" placeholder="Enter your username">
+              @if (EditProfileAdminForm.get('username').touched &&
+              EditProfileAdminForm.get('username').hasError('required')) {
+              <div class="error-message">Username is required.</div>
+              }
+              @if (EditProfileAdminForm.get('username').touched &&
+              EditProfileAdminForm.get('username').hasError('minlength')) {
+              <div class="error-message">Username must be at least 3 characters long.</div>
+              }
+            </div>
+            <div class="profile-form-item">
+              <label>Email:</label>
+              <input type="email" formControlName="email" placeholder="Enter email address">
+              @if (EditProfileAdminForm.get('email').touched && EditProfileAdminForm.get('email').hasError('required'))
+              {
+              <div class="error-message">Email is required.</div>
+              }
+              @if (EditProfileAdminForm.get('email').touched && EditProfileAdminForm.get('email').hasError('email')) {
+              <div class="error-message">Invalid email address.</div>
+              }
+            </div>
+            <div class="profile-form-item">
+              <label>Full Name:</label>
+              <input type="text" formControlName="fullName" placeholder="Enter your Fullname">
+              @if (EditProfileAdminForm.get('fullName').touched &&
+              EditProfileAdminForm.get('fullName').hasError('required')) {
+              <div class="error-message">Full name is required.</div>
+              }
+            </div>
+            <div class="form-group mt-3">
+              <button type="submit" class="button button-registerForm btn_4 boxed-btn">Save</button>&nbsp;
+              <button type="button" class="button button-registerForm btn_4 boxed-btn" (click)="showChangePasswordDialog()">Change Password</button>
+            </div>
+          </div>
+        </div>
+      </form>
+      }
+    </div>
+  </div>
+</section>
+<p-dialog header="Change Password" [(visible)]="displayChangePasswordDialog"  [modal]="true" [closable]="true">
+  @if (changePasswordForm != null) {
+    <form class="form-register register_form" [formGroup]="changePasswordForm" (ngSubmit)="saveChangePassword()" id="registerForm" novalidate="novalidate">
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <input class="form-control" formControlName="currentPassword" name="currentPassword" id="currentPassword"
+                        type="password" onfocus="this.placeholder = ''"
+                        onblur="this.placeholder = 'Enter current password'" placeholder='Enter current password' required>
+                    @if (changePasswordForm.get('currentPassword').touched && changePasswordForm.get('currentPassword').hasError('required')) {
+                        <div class="error-message">
+                            Current password is required.
+                        </div>
+                    }
+                    @if (changePasswordForm.get('currentPassword').touched && changePasswordForm.get('currentPassword').hasError('minlength')) {
+                        <div class="error-message">
+                            Current password must be at least 8 characters long.
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <input class="form-control" formControlName="newPassword" name="newPassword" id="newPassword"
+                        type="password" onfocus="this.placeholder = ''"
+                        onblur="this.placeholder = 'Enter new password'" placeholder='Enter new password' required>
+                    @if (changePasswordForm.get('newPassword').touched && changePasswordForm.get('newPassword').hasError('required')) {
+                        <div class="error-message">
+                            New password is required.
+                        </div>
+                    }
+                    @if (changePasswordForm.get('newPassword').touched && changePasswordForm.get('newPassword').hasError('minlength')) {
+                        <div class="error-message">
+                            New password must be at least 8 characters long.
+                        </div>
+                    }
+                    @if (changePasswordForm.get('newPassword').touched && changePasswordForm.get('newPassword').hasError('pattern')) {
+                        <div class="error-message">
+                            New password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="form-group mt-3">
+            <button type="submit" class="button button-registerForm btn_4 boxed-btn">Save</button>
+        </div>
+    </form>
+}
+</p-dialog>

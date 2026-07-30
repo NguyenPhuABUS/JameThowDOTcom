@@ -1,0 +1,182 @@
+<style>
+    .bradcam_area {
+        padding: 100px 0;
+        /* color: #fff; */
+        /* background: url('path-to-background-image.jpg') no-repeat center center; */
+        background-size: cover;
+    }
+
+    .bradcam_text h3,
+    .bradcam_text p {
+        color: #fff;
+    }
+
+    .contact-title {
+        font-size: 2em;
+        margin-bottom: 20px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .entries-section {
+        margin-top: 30px;
+    }
+
+    .entries-section ul {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .entries-section li {
+        margin: 15px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background: #fff;
+        transition: background 0.3s, box-shadow 0.3s;
+        width: calc(33% - 30px); /* Adjust width as needed */
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .entries-section li:hover {
+        background: #f1f1f1;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .entries-section img {
+        max-width: 100px;
+        border-radius: 5px;
+        margin-right: 15px;
+        vertical-align: middle;
+    }
+
+    .entries-section h3 {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0;
+    }
+
+    .entries-section .entry-meta {
+        margin: 10px 0;
+        color: #777;
+    }
+
+    .entries-section .btn {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+        text-decoration: none;
+    }
+
+    .entries-section .btn:hover {
+        background-color: #0056b3;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 1024px) {
+        .entries-section li {
+            width: calc(50% - 30px);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .entries-section li {
+            width: calc(100% - 30px);
+        }
+    }
+</style>
+
+<!-- Toast container for displaying messages -->
+<p-toast></p-toast>
+
+<div class="bradcam_area bradcam_bg_1">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text text-center">
+                    <h3>{{ contest?.title }}</h3>
+                    <p>{{ contest?.description }}</p>
+                    <p>Start Date: {{ contest?.startDate }}</p>
+                    <p>End Date: {{ contest?.endDate }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Submit Your Entry" [(visible)]="displayDialog" [modal]="true" [responsive]="true"
+    [style]="{width: '50vw'}">
+
+    <form [formGroup]="contestEntryForm" (ngSubmit)="submit()">
+        <div class="form-group">
+            <label for="contentId">Select Your Recipe:</label>
+            <select formControlName="contentId" class="form-control">
+                @if (contents != null) {
+                @for (content of contents; track content) {
+                <option [value]="content.contentId">{{ content.title }}</option>
+                }
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+</p-dialog>
+
+<section class="entries-section section_padding">
+    <div class="container">
+        <button type="button" class="btn btn-primary" (click)="showDialog()">Add</button>
+        <div class="row">
+            <div class="col-12">
+                <h2 class="contact-title">Current Entries</h2>
+            </div>
+            <div class="col-lg-12">
+                <ul>
+                    @if (contestEntries != null) {
+                    @for (entry of contestEntries; track entry) {
+                    <li>
+                        <img src="{{entry.contentImage}}" alt="{{entry.contentTitle}}">
+                        <h3>{{ entry.contentTitle }}</h3>
+                        <div class="entry-meta">
+                            <p>Submitted on: {{ entry.submissionDate }}</p>
+                        </div>
+                        <a class="btn" [routerLink]="['/recipes-details', {contentId: entry.contentId}]">View
+                            Details</a>
+                    </li>
+                    }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>

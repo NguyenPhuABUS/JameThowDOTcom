@@ -1,0 +1,113 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+<div class="card">
+    <div class="header-container">
+        <h3>Subscription Package</h3>
+        <div class="flex-container">
+            <div class="search-container">
+                <input type="text" pInputText placeholder="Search" (input)="onGlobalFilter($event)" class="form-control">
+            </div>
+            <button pButton type="button" label="Add New Contest" icon="pi pi-plus" class="p-button-success" (click)="show()"></button>
+        </div>
+    </div>
+
+    <p-table #dt2 dataKey="id" [paginator]="true" [rows]="5" 
+    [value]="packages" [tableStyle]="{'min-width': '60rem'}" [globalFilterFields]="['packageName','price','description','durationMonths']">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>#</th>
+                <th>Package Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Duration Months</th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-package let-i="rowIndex">
+            <tr>
+                <td>{{i + 1}}</td>
+                <td>{{package.packageName}}</td>
+                <td>{{package.price}}</td>
+                <td>{{package.description}}</td>
+                <td>{{package.durationMonths}}</td>
+                <td>
+                    <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="showDialog(package)"></button>
+                    <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDelete(package.packageId)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+<p-dialog header="Add New Package" [(visible)]="display" modal="modal" [closable]="true" [style]="{width: '50vw'}">
+    <form [formGroup]="addPackageForm" (ngSubmit)="submit()">
+        <div class="form-group">
+            <label for="packageName">Package Name</label>
+            <input id="packageName" formControlName="packageName" type="text" pInputText />
+            <div *ngIf="addPackageForm.controls['packageName'].invalid && (addPackageForm.controls['packageName'].dirty || addPackageForm.controls['packageName'].touched)">
+                <small class="p-error">Package Name is required.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="price">Price</label>
+            <input id="price" formControlName="price" type="number" pInputText (input)="validateNumber($event)" />
+            <div *ngIf="addPackageForm.controls['price'].invalid && (addPackageForm.controls['price'].dirty || addPackageForm.controls['price'].touched)">
+                <small class="p-error">Price is required and must be non-negative.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" formControlName="description" rows="3" pInputTextarea></textarea>
+            <div *ngIf="addPackageForm.controls['description'].invalid && (addPackageForm.controls['description'].dirty || addPackageForm.controls['description'].touched)">
+                <small class="p-error">Description is required.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="durationMonths">Duration Months</label>
+            <input id="durationMonths" formControlName="durationMonths" type="number" pInputText (input)="validateNumber($event)" />
+            <div *ngIf="addPackageForm.controls['durationMonths'].invalid && (addPackageForm.controls['durationMonths'].dirty || addPackageForm.controls['durationMonths'].touched)">
+                <small class="p-error">Duration Months is required and must be non-negative.</small>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" pButton label="Add Package" class="p-button-primary" [disabled]="addPackageForm.invalid"></button>
+        </div>
+    </form>
+</p-dialog>
+<p-dialog header="Edit Package" [(visible)]="editPackageDialog" modal="modal" [closable]="true" [style]="{width: '50vw'}">
+    @if (editPackageForm != null) {
+        <form [formGroup]="editPackageForm" (ngSubmit)="submitEdit()">
+        <div class="form-group">
+            <label for="editPackageName">Package Name</label>
+            <input id="editPackageName" formControlName="packageName" type="text" pInputText />
+            <div *ngIf="editPackageForm.controls['packageName'].invalid && (editPackageForm.controls['packageName'].dirty || editPackageForm.controls['packageName'].touched)">
+                <small class="p-error">Package Name is required.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="editPrice">Price</label>
+            <input id="editPrice" formControlName="price" type="number" pInputText (input)="validateNumber($event)" />
+            <div *ngIf="editPackageForm.controls['price'].invalid && (editPackageForm.controls['price'].dirty || editPackageForm.controls['price'].touched)">
+                <small class="p-error">Price is required and cannot be negative.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="editDescription">Description</label>
+            <textarea id="editDescription" formControlName="description" rows="3" pInputTextarea></textarea>
+            <div *ngIf="editPackageForm.controls['description'].invalid && (editPackageForm.controls['description'].dirty || editPackageForm.controls['description'].touched)">
+                <small class="p-error">Description is required.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="editDurationMonths">Duration Months</label>
+            <input id="editDurationMonths" formControlName="durationMonths" type="number" pInputText (input)="validateNumber($event)" />
+            <div *ngIf="editPackageForm.controls['durationMonths'].invalid && (editPackageForm.controls['durationMonths'].dirty || editPackageForm.controls['durationMonths'].touched)">
+                <small class="p-error">Duration Months is required and cannot be negative.</small>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" pButton label="Save Changes" class="p-button-primary" [disabled]="editPackageForm.invalid"></button>
+        </div>
+    </form>
+    }
+    
+</p-dialog>

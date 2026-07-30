@@ -1,0 +1,401 @@
+<style>
+    /* Đảm bảo các phần tử hiển thị theo đúng thứ tự */
+    .recepie_area {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .button-container button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        margin-right: 20px;
+    }
+
+    .button-container button:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+    }
+
+    .search_bar {
+        margin-bottom: 20px;
+        flex-grow: 1;
+    }
+
+    .search_bar input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-top: 22px;
+    }
+
+    .recipe_filters {
+        margin-right: 30px;
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .recipe_filters ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .recipe_filters ul li {
+        margin-bottom: 10px;
+    }
+
+    .single_recepie {
+        margin-bottom: 30px;
+    }
+
+    /* Đảm bảo hình ảnh công thức không bị co giãn */
+    .recepie_thumb img {
+        max-width: 50px;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    /* Styles for pagination controls */
+    .pagination-controls {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .pagination-controls button {
+        margin: 0 5px;
+        padding: 10px 20px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .pagination-controls button:disabled {
+        background-color: #ccc;
+    }
+
+    /* Căn chỉnh các cột của bảng */
+    .p-table th,
+    .p-table td {
+        text-align: center;
+        vertical-align: middle;
+        padding: 10px;
+    }
+
+    .p-table th {
+        background-color: #f1f1f1;
+        font-weight: bold;
+    }
+
+    /* Styles for the dialog content */
+    .dialog-content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .dialog-content label {
+        font-weight: bold;
+    }
+
+    .dialog-content input,
+    .dialog-content textarea,
+    .dialog-content select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .dialog-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    .custom-save-button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .custom-save-button:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+    }
+
+    .custom-file-upload {
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        border: none;
+        font-size: 16px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        margin-top: 10px; /* Thêm khoảng cách phía trên */
+        max-width: 150px; /* Điều chỉnh độ rộng tối đa */
+        text-align: center; /* Căn giữa chữ */
+    }
+
+    .custom-file-upload:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+    }
+
+    .custom-file-upload input[type="file"] {
+        display: none;
+    }
+
+    .dialog-content .p-field {
+        margin-bottom: 20px;
+    }
+
+    .dialog-content label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .dialog-content input,
+    .dialog-content textarea,
+    .dialog-content select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+</style>
+
+<p-toast></p-toast>
+<!-- bradcam_area  -->
+<div class="bradcam_area bradcam_bg_1">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text text-center">
+                    <h3>Recipes</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /bradcam_area  -->
+
+<!-- recepie_area_start  -->
+<div class="recepie_area plus_padding">
+    <div class="container">
+        <div class="row">
+            <!-- Recipe items -->
+            <div class="button-container">
+                <button type="button" (click)="viewAddContent()">Add</button>
+                <div class="search_bar">
+                    <input type="text" id="search_input" placeholder="Search recipes..." (keyup)="searchByKeyword($event)">
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="row">
+                    <p-table [value]="contents" [paginator]="true" [rows]="5">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>#</th>
+                                <th>Image</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Date Submitted</th>
+                                <th>Edit Date</th>
+                                <th>Rating</th>
+                                <th>Action</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-content let-i="rowIndex">
+                            <tr>
+                                <td>{{ i + 1 }}</td>
+                                <td>
+                                    <div class="recepie_thumb">
+                                        <img [src]="content.imageUrl" alt="Không có ảnh">
+                                    </div>
+                                </td>
+                                <td>{{ content.title }}</td>
+                                <td>{{ content.categoryName }}</td>
+                                <td>{{ content.createdAt }}</td>
+                                <td>{{ content.updatedAt }}</td>
+                                <td>
+                                    <p-rating [(ngModel)]="content.rating" [cancel]="false" [readonly]="true"></p-rating>
+                                </td>
+                                <td>
+                                    <a (click)="viewContentDetails(content)">Edit</a> | 
+                                    <a (click)="delete(content.contentId)">Delete</a>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /recepie_area_start  -->
+
+<!-- Dialog for Content Details -->
+<p-dialog header="Content Details" [(visible)]="displayDialog" [modal]="true" [style]="{width: '80vw'}">
+    <form [formGroup]="contentForm" (ngSubmit)="save()" class="dialog-content">
+        @if (selectedContent != null) {
+        <div class="p-grid p-fluid">
+            <div class="p-col-12 p-md-12">
+                <div class="p-field">
+                    <img [src]="imageUrl || selectedContent.imageUrl" alt="Không có ảnh">
+                    <!-- @if (imageUrl != null) {
+                        <img id="preview" src="{{imageUrl}}" alt="Profile Picture"
+                            style="margin-top: 10px; max-width: 20%; border-radius: 5px;">
+                    } -->
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6">
+                <div class="p-field">
+                    <label for="title">Title</label>
+                    <input id="title" type="text" pInputText formControlName="title" />
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6">
+                <div class="p-field">
+                    <label>Category</label>
+                    <!-- <input type="text" formControlName="categoryName"> -->
+                    <select class="form-control" formControlName="categoryId">
+                        @if (categories != null) {
+                        @for (category of categories; track category) {
+
+                        <option value="{{category.categoryId}}">{{ category.categoryName }}</option>
+                        }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-12">
+                <div class="p-field">
+                    <label for="content">Content</label>
+                    <textarea id="content" pInputTextarea formControlName="content1" rows="5"></textarea>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6">
+                <div class="p-field">
+                    <label for="isFree">Free</label>
+                    <input type="checkbox" id="isFree" pInputText formControlName="isFree" />
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6">
+                <div class="p-field">
+                    <label for="contentType">Content Type</label>
+                    <!-- <input id="contentType" type="text" pInputText formControlName="contentType" /> -->
+                    <select formControlName="contentType">
+                        <option value="recipes">Recipes</option>
+                        <option value="tip">Tip</option>
+                    </select>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-12">
+                <div class="p-field">
+                    <label for="file">Choose Image</label>
+                    <label class="custom-file-upload">
+                        <input id="file" type="file" (change)="onFileChange($event)">
+                        Choose Image
+                    </label>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-12">
+                <button type="submit" pButton label="Update">Save</button>
+            </div>
+        </div>
+        }
+    </form>
+</p-dialog>
+
+<!-- Dialog for Content Add -->
+<p-dialog header="Content Add" [(visible)]="displayAddContent" [modal]="true" [style]="{width: '50vw'}">
+    <form [formGroup]="contentAddForm" (ngSubmit)="submit()" class="dialog-content">
+        <div class="p-grid p-fluid">
+            <div class="p-col-12 p-md-6">
+                <div class="p-field">
+                    <label for="title">Title</label>
+                    <input id="title" type="text" pInputText formControlName="title" />
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6">
+                <div class="p-field">
+                    <label>Category</label>
+                    <select class="form-control" formControlName="categoryId">
+                        @if (categories != null) {
+                        @for (category of categories; track category) {
+                        <option value="{{category.categoryId}}">{{ category.categoryName }}</option>
+                        }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="p-col-12">
+                <div class="p-field">
+                    <label for="content">Content</label>
+                    <textarea id="content" pInputTextarea formControlName="content1" rows="5"></textarea>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6">
+                <div class="p-field">
+                    <label for="isFree">Free</label>
+                    <input type="checkbox" id="isFree" formControlName="isFree" />
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6">
+                <div class="p-field">
+                    <label for="contentType">Content Type</label>
+                    <select formControlName="contentType">
+                        <option value="recipes">Recipes</option>
+                        <option value="tip">Tip</option>
+                    </select>
+                </div>
+            </div>
+            <div class="p-col-12">
+                <div class="p-field">
+                    <label for="file">Choose Image</label>
+                    <label class="custom-file-upload">
+                        <input id="file" type="file" (change)="onFileChange($event)">
+                        Choose Image
+                    </label>
+                    @if (imageUrl != null) {
+                        <img id="preview" src="{{imageUrl}}" alt="Profile Picture"
+                            style="margin-top: 10px; max-width: 20%; border-radius: 5px;">
+                    }
+                </div>
+            </div>
+            <div class="p-col-12" style="text-align: center;">
+                <button type="submit" pButton label="Save" class="custom-save-button">Save</button>
+            </div>
+        </div>
+    </form>
+</p-dialog>

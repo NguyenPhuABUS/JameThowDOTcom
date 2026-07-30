@@ -1,0 +1,309 @@
+<style>
+    /* Đổi màu chữ của các mục trong menu thành màu trắng */
+.main-menu nav ul li a {
+  color: white !important;
+}
+
+/* Đổi màu chữ của các mục trong submenu thành màu trắng */
+.main-menu nav ul li ul.submenu li a {
+  color: black !important;
+}
+
+/* Đổi màu chữ của các biểu tượng tìm kiếm */
+.search_icon a {
+  color: white !important;
+}
+
+/* Styling for username display */
+.username-display {
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 15px;
+}
+
+/* Notification styles */
+.notification-container {
+  position: relative;
+  display: inline-block;
+}
+
+.notification-icon {
+  cursor: pointer;
+  color: white;
+  font-size: 24px;
+  margin-left: 15px;
+}
+
+.notification-count {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
+.notification-list {
+  display: none;
+  position: absolute;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.notification-container:hover .notification-list {
+  display: block;
+}
+
+.notification-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notification-list li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  word-wrap: break-word; /* This property allows long words to be broken and wrap to the next line */
+}
+
+.notification-list li:last-child {
+  border-bottom: none;
+}
+
+.notification-list p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.notification-list span {
+  display: block;
+  font-size: 12px;
+  color: #999;
+}
+
+</style>
+<header>
+    <div class="header-area ">
+      <div id="sticky-header" class="main-header-area ">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-xl-3 col-lg-2">
+              <div class="logo">
+                <a [routerLink]="['/home']">
+                  <img src="assets/img/logo.png" alt="">
+                </a>
+              </div>
+            </div>
+            <div class="col-xl-6 col-lg-7">
+              <div class="main-menu d-none d-lg-block">
+                <nav>
+                  <ul id="navigation">
+                    <li><a [routerLink]="['/home']">home</a></li>
+                    <li><a [routerLink]="['/about']">about</a></li>
+                    <li><a [routerLink]="['/recipes']">Recipes</a></li>
+                    <li><a [routerLink]="['/contestList']">Contest</a></li>
+                    <li><a [routerLink]="['/contactus']">Contact</a></li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+            <div class="main-menu d-none d-lg-block" *ngIf="isLoggedIn()">
+              <nav>
+                <ul id="navigation">
+                  <li>
+                    <a href="#">Welcome, {{username}}<i class="ti-angle-down"></i></a>
+                    <ul class="submenu">
+                      @if (account != null) {
+                      <li>
+                        <a [routerLink]="['/profile', {userId: account.userId}]">
+                          <i class="pi-user-edit"></i> Profile
+                        </a>
+                      </li>
+                      <li>
+                        <a [routerLink]="['/changePassword', {userId: account.userId}]">
+                          <i class="pi-user-edit"></i> ChangePassword
+                        </a>
+                      </li>
+                      <li>
+                        <a [routerLink]="['/recipePosted',{userId: account.userId}]">
+                          <i class="pi-user-edit"></i> Recipe Posted
+                        </a>
+                      </li>
+                      }
+                      <li>
+                        <a [routerLink]="['/history']">
+                          <i class="pi-user-edit"></i> History
+                        </a>
+                      </li>
+                      <li>
+                        <a (click)="logout()">
+                          <i class="pi-sign-out"></i> Logout
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+            <!-- <div class="main-menu d-none d-lg-block" *ngIf="isLoggedIn()">
+                <p-splitButton label="Welcome, {{username}}" icon="pi pi-user" [model]="items"></p-splitButton>
+            </div> -->
+            <div class="main-menu d-none d-lg-block" *ngIf="NotLoggedIn()">
+              <nav>
+                <ul id="navigation">
+                  <li><a [routerLink]="['/login']">login</a></li>
+                </ul>
+              </nav>
+            </div>
+            <!-- Notification icon always visible -->
+            <div class="notification-container">
+              <div class="notification-icon" (click)="toggleAnnouncements()">
+                <i class="fa fa-bell"></i>
+                <span class="notification-count" *ngIf="announcements.length > 0">{{ announcements.length }}</span>
+              </div>
+              <div class="notification-list" *ngIf="showAnnouncements">
+                <ul>
+                  <li *ngFor="let announcement of announcements">
+                    <p>{{ announcement.content }}</p>
+                    <span>{{ announcement.createdAt }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+  
+            <div class="col-12">
+              <div class="mobile_menu d-block d-lg-none"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  
+  <router-outlet></router-outlet>
+  
+  <footer class="footer">
+    <div class="footer_top">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-2 col-md-6 col-lg-2">
+            <div class="footer_widget">
+              <h3 class="footer_title">
+                Top Products
+              </h3>
+              <ul>
+                <li><a href="#">Managed Website</a></li>
+                <li><a href="#"> Manage Reputation</a></li>
+                <li><a href="#">Power Tools</a></li>
+                <li><a href="#">Marketing Service</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xl-2 col-md-6 col-lg-2">
+            <div class="footer_widget">
+              <h3 class="footer_title">
+                Quick Links
+              </h3>
+              <ul>
+                <li><a href="#">Jobs</a></li>
+                <li><a href="#">Brand Assets</a></li>
+                <li><a href="#">Investor Relations</a></li>
+                <li><a href="#">Terms of Service</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xl-2 col-md-6 col-lg-2">
+            <div class="footer_widget">
+              <h3 class="footer_title">
+                Features
+              </h3>
+              <ul>
+                <li><a href="#">Jobs</a></li>
+                <li><a href="#">Brand Assets</a></li>
+                <li><a href="#">Investor Relations</a></li>
+                <li><a href="#">Terms of Service</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xl-2 col-md-6 col-lg-2">
+            <div class="footer_widget">
+              <h3 class="footer_title">
+                Resources
+              </h3>
+              <ul>
+                <li><a href="#">Guides</a></li>
+                <li><a href="#">Research</a></li>
+                <li><a href="#">Experts</a></li>
+                <li><a href="#">Agencies</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xl-4 col-md-6 col-lg-4">
+            <div class="footer_widget">
+              <h3 class="footer_title">
+                Subscribe
+              </h3>
+              <p class="newsletter_text">You can trust us. we only send promo offers,</p>
+              <form action="#" class="newsletter_form">
+                <input type="text" placeholder="Enter your mail">
+                <button type="submit"> <i class="ti-arrow-right"></i> </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="copy-right_text">
+      <div class="container">
+        <div class="footer_border"></div>
+        <div class="row align-items-center">
+          <div class="col-xl-8 col-md-8">
+            <p class="copy_right">
+              <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+              Copyright &copy;
+              <script>document.write(new Date().getFullYear());</script> All rights reserved | This template
+              is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com"
+                target="_blank">Colorlib</a>
+              <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            </p>
+          </div>
+          <div class="col-xl-4 col-md-4">
+            <div class="socail_links">
+              <ul>
+                <li>
+                  <a href="#">
+                    <i class="ti-facebook"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="ti-twitter-alt"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa fa-dribbble"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa fa-behance"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  

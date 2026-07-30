@@ -1,0 +1,51 @@
+.button-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px; /* Khoảng cách phía dưới */
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.custom-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    text-decoration: none; /* Loại bỏ underline mặc định */
+    display: inline-block;
+}
+
+.custom-button:hover {
+    background-color: #0056b3;
+}
+
+.custom-button-reload {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    text-decoration: none; /* Loại bỏ underline mặc định */
+    display: inline-block;
+}
+
+.custom-button-reload:hover {
+    background-color: #c82333;
+}
+
+.search-label {
+    font-weight: bold;
+    margin-right: 10px; /* Khoảng cách phía bên phải */
+}
+
+.search-input {
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 180px; /* Độ rộng của input */
+}

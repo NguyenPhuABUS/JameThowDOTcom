@@ -1,0 +1,38 @@
+<div class="card">
+    <div class="search-container">
+        <div class="p-inputgroup custom-search">
+            <span class="p-inputgroup-addon custom-addon"><i class="pi pi-search"></i></span>
+            <input type="text" pInputText placeholder="Search" (input)="onGlobalFilter($event)" class="custom-search-input">
+        </div>
+    </div>
+    
+    <p-table #dt2 [value]="contacts" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '50rem' }"
+        [rowsPerPageOptions]="[1, 2, 3]" class="custom-table" [globalFilterFields]="['name', 'email', 'message', 'createdAt']">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>CreatedAt</th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-contact let-i="rowIndex">
+            <tr>
+                <td>{{i + 1}}</td>
+                <td>{{contact.name}}</td>
+                <td>{{contact.email}}</td>
+                <td>{{contact.message}}</td>
+                <td>{{contact.createdAt}}</td>
+                <td>
+                    <button pButton type="button" label="Delete" icon="pi pi-trash" class="p-button-danger"
+                        (click)="confirmDelete(contact.contactId)"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between"></div>
+        </ng-template>
+    </p-table>
+</div>

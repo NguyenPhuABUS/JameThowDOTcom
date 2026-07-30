@@ -1,0 +1,73 @@
+<style>
+    .pricing_table_area {
+        padding: 50px 0;
+    }
+    .single_pricing {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+    .single_pricing h4 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+    .single_pricing h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+    }
+    .single_pricing h1 span {
+        font-size: 0.5em;
+    }
+    .single_pricing p {
+        font-size: 1em;
+        color: #555;
+        margin-bottom: 20px;
+    }
+    .single_pricing button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .single_pricing button:hover {
+        background-color: #0056b3;
+    }
+    .single_pricing button i {
+        margin-right: 5px;
+    }
+</style>
+
+<div class="pricing_table_area">
+    <div class="container">
+        <div class="row justify-content-center">
+            @if (packages != null) {
+            @for (pkg of packages; track pkg) {
+            <div class="col-lg-4 col-md-6">
+                <div class="single_pricing">
+                    <h4>{{ pkg.packageName }}</h4>
+                    <h1>${{ pkg.price }} <span>/{{ pkg.durationMonths === 1 ? 'month' : 'year' }}</span></h1>
+                    <p>{{ pkg.description }}</p>
+                    <p>Duration: {{ pkg.durationMonths }} {{ pkg.durationMonths === 1 ? 'month' : 'months' }}</p>
+                    <button (click)="selectPackage(pkg)">
+                        <i class="fa fa-credit-card"></i> Payment
+                    </button>
+                </div>
+            </div>
+            }
+            }
+        </div>
+    </div>
+    <p-dialog header="Payment" [(visible)]="displayDialog" [draggable]="false" [resizable]="false" [modal]="true" [style]="{width: '50vw'}" (onShow)="onDialogShow()" (onHide)="closeDialog()">
+        <div *ngIf="selectedPackage">
+            <h3>{{ selectedPackage.packageName }}</h3>
+            <ngx-paypal [config]="payPalConfig"></ngx-paypal>
+        </div>
+    </p-dialog>
+</div>

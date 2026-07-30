@@ -1,0 +1,127 @@
+<p-toast></p-toast>
+
+<div class="button-container">
+    <div class="search-container">
+        <input type="text" pInputText placeholder="Search" (input)="onGlobalFilter($event)" class="form-control">
+    </div>
+    <button pButton type="button" class="custom-button-reload" (click)="reloadPage()">Reload</button>
+    <button pButton type="button" class="custom-button-content-admin" [routerLink]="['/admin/contentadmin',{userId: account.userId}]">Content-Admin</button>
+</div>
+
+<div class="card">
+    <p-table #dt2 dataKey="id" [value]="contents" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '50rem' }"
+        [rowsPerPageOptions]="[5, 10, 15]" [globalFilterFields]="['title','content1','username','categoryName','isFree']" class="custom-table">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>#</th>
+                <th pSortableColumn="title">Title<p-sortIcon field="title"></p-sortIcon></th>
+                <th>Image</th>
+                <th style="width: 15%">Content</th>
+                <th style="width: 17%">Username</th>
+                <th pSortableColumn="categoryName" style="width:13%">Category<p-sortIcon field="categoryName"></p-sortIcon></th>
+                <th>IsFree</th>
+                <th pSortableColumn="rating">Rating<p-sortIcon field="rating"></p-sortIcon></th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>
+                    <p-columnFilter type="text" field="content1" placeholder="Content" ariaLabel="Filter Content"></p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="username" placeholder="Username" ariaLabel="Filter Username"></p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter field="categoryName" matchMode="equals" [showMenu]="false">
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-dropdown 
+                                [(ngModel)]="selectedCategory" 
+                                [options]="categoryOptions"
+                                (onChange)="filter($event.value)" 
+                                placeholder="Select One" 
+                                [showClear]="true">
+                            </p-dropdown>
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th><p-columnFilter type="boolean" field="isFree" /></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-content let-i="rowIndex">
+            <tr>
+                <td>{{i + 1}}</td>
+                <td>{{content.title}}</td>
+                <td><img src="{{content.imageUrl}}" class="avatar"></td>
+                <!-- <td class="content-cell">{{content.content1 | truncate:100 }}</td> -->
+                <td class="content-cell"><p [innerHTML]="content.content1 | formatContent | truncate:100"></p></td>
+                <td>{{content.username}}</td>
+                <td>{{content.categoryName}}</td>
+                <td>{{content.isFree}}</td>
+                <td><p-rating [(ngModel)]="content.rating" [cancel]="false" [readonly]="true"></p-rating></td>
+                <td>
+                    <button pButton type="button" icon="pi pi-trash" class="p-button-danger" (click)="confirmDelete(content.contentId)" style="margin-right: 5px;"></button>
+                    <button pButton type="button" icon="pi pi-comments" class="p-button-success" (click)="showDialog(content)"></button>
+                    <button pButton type="button" icon="pi pi-info-circle" class="p-button-info" (click)="showDetailDialog(content)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+
+<p-dialog header="FeedBack" [(visible)]="visible" [modal]="true" [style]="{ width: '50rem' }">
+    <p-table [value]="feedbacks" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '50rem' }"
+        [rowsPerPageOptions]="[5, 10, 15]" class="custom-table">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Feedback ID</th>
+                <th>Image</th>
+                <th>Content</th>
+                <th>Created At</th>
+                <th>Username</th>
+                <th>Rating</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-feedback>
+            <tr>
+                <td>{{feedback.feedbackId}}</td>
+                <td><img src="{{feedback.avatarUrl}}" class="avatar" style="width: 50px; height: 50px;"></td>
+                <td>{{feedback.content}}</td>
+                <td>{{feedback.createdAt}}</td>
+                <td>{{feedback.username}}</td>
+                <td><p-rating [(ngModel)]="feedback.rating" [cancel]="false" [readonly]="true"></p-rating></td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>
+<p-dialog header="Content Details" [(visible)]="detailsDialog" [modal]="true" [style]="{ width: '50rem' }" [closable]="true" [dismissableMask]="true">
+    <div *ngIf="selectedContent">
+        <div class="content-details-container">
+            <div class="content-header">
+                <h2>{{ selectedContent.title }}</h2>
+            </div>
+            <div class="content-info">
+                <img [src]="selectedContent.imageUrl" class="content-image">
+                <div class="content-meta">
+                    <p><strong>Username:</strong> {{ selectedContent.username }}</p>
+                    <p><strong>Category:</strong> {{ selectedContent.categoryName }}</p>
+                    <p><strong>Content Type:</strong> {{ selectedContent.contentType }}</p>
+                    <p><strong>Is Free:</strong> {{ selectedContent.isFree }}</p>
+                    <p><strong>Rating:</strong> <p-rating [(ngModel)]="selectedContent.rating" [cancel]="false" [readonly]="true"></p-rating></p>
+                    <p><strong>Created At:</strong> {{ selectedContent.createdAt}}</p>
+                    <p><strong>Updated At:</strong> {{ selectedContent.updatedAt}}</p>
+                </div>
+            </div>
+            <div class="content-description">
+                <p><strong>Content:</strong></p>
+                <!-- <p>{{ selectedContent.content1 }}</p> -->
+                <p [innerHTML]="selectedContent.content1 | formatContent"></p>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+

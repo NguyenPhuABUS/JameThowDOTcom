@@ -1,0 +1,41 @@
+
+<div class="card">
+    <p-table [value]="contestEntries" [tableStyle]="{'min-width': '60rem'}">
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between" style="text-align: center;margin-right: 50px">
+                <h3>contestEntries</h3>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>entryId</th>
+                <th>userId</th>
+                <th>contestId</th>
+                <th>contentId</th>
+                <th>submissionDate</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-contestEntrie>
+            <tr>
+                <td>{{contestEntrie.entryId}}</td>
+                <td>{{contestEntrie.userId}}</td>
+                <td>{{contestEntrie.contestId}}</td>
+                <td>{{contestEntrie.contentId}}</td>
+                <td>{{contestEntrie.submissionDate}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+            </div>
+        </ng-template>
+    </p-table>
+</div>
+<style>
+    .card{
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-top: 20px;
+        background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+</style>

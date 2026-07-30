@@ -1,0 +1,72 @@
+.container {
+    width: 800px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 100px auto;
+    display: flex;
+    background-color: #fff;
+}
+
+.container-body {
+    display: flex;
+    width: 100%;
+}
+
+.card-login {
+    width: 50%;
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+.header h3 {
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group p {
+    margin: 0 0 5px 0;
+    font-weight: bold;
+}
+
+.form-control {
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #6f4e37;
+    border-radius: 0;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #6f4e37;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #5b3d2e;
+}
+
+.image {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.image img {
+    width: 100%;
+    height: auto;
+    border-radius: 0 4px 4px 0;
+}

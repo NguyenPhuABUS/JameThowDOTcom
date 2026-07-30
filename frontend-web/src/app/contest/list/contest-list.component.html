@@ -1,0 +1,166 @@
+<style>
+    .competitions {
+        margin: 50px 0;
+    }
+
+    .competition-title {
+        font-size: 2em;
+        margin-bottom: 20px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .competition-list {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .competition-item {
+        margin: 15px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: #fff;
+        transition: background 0.3s, box-shadow 0.3s;
+        width: calc(33% - 30px); /* Adjust width as needed */
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .competition-item:hover {
+        background: #f1f1f1;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .competition-item h3 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .competition-item p {
+        font-size: 1em;
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    .competition-item .dates {
+        font-size: 0.9em;
+        color: #777;
+        margin-bottom: 20px;
+    }
+
+    .competition-item .winner {
+        font-size: 1em;
+        color: green;
+        margin-bottom: 10px;
+    }
+
+    .competition-item button {
+        background: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+        align-self: center;
+    }
+
+    .competition-item button:hover {
+        background: #0056b3;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 1024px) {
+        .competition-item {
+            width: calc(50% - 30px);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .competition-item {
+            width: calc(100% - 30px);
+        }
+    }
+
+    .dropdown-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    select.custom-select {
+        appearance: none;
+        background-color: #f8f8f8;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        /* padding: 10px; */
+        font-size: 16px;
+        color: #333;
+        outline: none;
+        cursor: pointer;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    select.custom-select:hover {
+        border-color: #bbb;
+    }
+
+    select.custom-select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+</style>
+
+<div class="bradcam_area bradcam_bg_1">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text text-center">
+                    <h3>Competitions</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="contact-section section_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="contact-title">Competitions</h2>
+                <div class="dropdown-container">
+                    <select class="custom-select" [(ngModel)]="showEndedContests" (change)="onSelectChange($event)">
+                        <option value="all">All Contests</option>
+                        <option value="ended">Ended Contests</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <ul class="competition-list">
+                    @if (contests != null) {
+                    @for (contest of contests; track contest) {
+                    <li class="competition-item">
+                        <h3>{{contest.title}}</h3>
+                        <p>{{contest.description}}</p>
+                        <div class="dates">
+                            <p>{{contest.startDate}} - {{contest.endDate}}</p>
+                        </div>
+                        @if (contest.winnerUserId) {
+                        <p class="winner">Winner: {{contest.winnerUserId}}</p>
+                        }
+                        <button [routerLink]="['/contestDetails',{contestId: contest.contestId}]">View Details</button>
+                    </li>
+                    }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>

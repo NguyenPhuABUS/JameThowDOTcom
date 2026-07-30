@@ -1,0 +1,251 @@
+<style>
+    /* Đảm bảo các phần tử hiển thị theo đúng thứ tự */
+    .recepie_area {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .button-container button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        margin-right: 20px;
+    }
+
+    .button-container button:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+    }
+
+    .search_bar {
+        margin-bottom: 20px;
+        flex-grow: 1;
+    }
+
+    .search_bar input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-top: 22px;
+    }
+
+    .recipe_filters {
+        margin-right: 30px;
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .recipe_filters ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .recipe_filters ul li {
+        margin-bottom: 10px;
+    }
+
+    .single_recepie {
+        margin-bottom: 30px;
+    }
+
+    /* Đảm bảo hình ảnh công thức không bị co giãn */
+    .recepie_thumb img {
+        max-width: 50px;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    /* Styles for pagination controls */
+    .pagination-controls {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .pagination-controls button {
+        margin: 0 5px;
+        padding: 10px 20px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .pagination-controls button:disabled {
+        background-color: #ccc;
+    }
+
+    /* Căn chỉnh các cột của bảng */
+    .p-table th,
+    .p-table td {
+        text-align: center;
+        vertical-align: middle;
+        padding: 10px;
+    }
+
+    .p-table th {
+        background-color: #f1f1f1;
+        font-weight: bold;
+    }
+
+    /* Styles for the dialog content */
+    .dialog-content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .dialog-content label {
+        font-weight: bold;
+    }
+
+    .dialog-content input,
+    .dialog-content textarea,
+    .dialog-content select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .dialog-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    .custom-save-button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .custom-save-button:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+    }
+
+    .custom-file-upload {
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        border: none;
+        font-size: 16px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        margin-top: 10px; /* Thêm khoảng cách phía trên */
+        max-width: 150px; /* Điều chỉnh độ rộng tối đa */
+        text-align: center; /* Căn giữa chữ */
+    }
+
+    .custom-file-upload:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+    }
+
+    .custom-file-upload input[type="file"] {
+        display: none;
+    }
+
+    .dialog-content .p-field {
+        margin-bottom: 20px;
+    }
+
+    .dialog-content label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .dialog-content input,
+    .dialog-content textarea,
+    .dialog-content select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+</style>
+
+<p-toast></p-toast>
+<!-- bradcam_area  -->
+<div class="bradcam_area bradcam_bg_1">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text text-center">
+                    <h3>Transaction History</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /bradcam_area  -->
+
+<!-- recepie_area_start  -->
+<div class="recepie_area plus_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="row">
+                    <p-table [value]="payments" [paginator]="true" [rows]="5">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>#</th>
+                                <th>Username</th>
+                                <th>Typep</th>
+                                <th>StartDate</th>
+                                <th>EndDate</th>
+                                <th>Status</th>
+                                <th>PaymentDate</th>
+                                <th>PaymentMethod</th>
+                                <th>Amount</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-payment let-i="rowIndex">
+                            <tr>
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ payment.username }}</td>
+                                <td>{{ payment.typep }}</td>
+                                <td>{{ payment.startDate }}</td>
+                                <td>{{ payment.endDate }}</td>
+                                <td>{{ payment.status }}</td>
+                                <td>{{ payment.paymentDate }}</td>
+                                <td>{{ payment.paymentMethod }}</td>
+                                <td>{{ payment.amount }}</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /recepie_area_start  -->

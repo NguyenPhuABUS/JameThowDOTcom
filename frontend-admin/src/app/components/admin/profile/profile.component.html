@@ -1,0 +1,59 @@
+@if(profileForm != null) {
+  <form [formGroup]="profileForm" class="profile-container">
+      <div class="profile-sidebar">
+          <img [src]="profileForm.get('avatarUrl').value || 'https://via.placeholder.com/150'" alt="Avatar" class="profile-avatar">
+          <h2>{{ profileForm.get('fullname').value }}</h2>
+          <h2>{{ profileForm.get('roles').value}}</h2>
+      </div>
+      <div class="profile-content">
+          <div class="profile-section">
+              <h3 style="text-align: center;">Contestant</h3>
+              <div class="profile-tabs"></div>
+              <div class="profile-form">
+                  <div class="profile-form-item">
+                      <label>Username :</label>
+                      <p>{{profileForm.get('username').value}}</p>
+                  </div>
+                  <div class="profile-form-item">
+                      <label>Password :</label>
+                      <p>********</p>
+                  </div>
+                  <div class="profile-form-item">
+                      <label>Email :</label>
+                      <p>{{profileForm.get('email').value}}</p>
+                  </div>
+                  <div class="profile-form-item">
+                      <label>Status :</label>
+                      <span>{{ profileForm.status ? 'IsActive' : 'Inactive' }}</span>
+                  </div> 
+              </div>  
+          </div>
+      </div>
+      <div class="profile-form-contest">
+          <h3 style="text-align: center;margin-top: 20px;">Competition</h3>
+          <div class="profile-tabs"></div>
+          @if(contestEntries != null){
+              <div class="profile-form-item">
+                  <label>ContestTitle :</label>
+                  <p>{{contestEntries.contestTitle}}</p>
+              </div>
+              <div class="profile-form-item">
+                  <label>Title :</label>
+                  <p>{{contestEntries.title}}</p>
+              </div>
+              <div class="profile-form-item">
+                  <label>Content :</label>
+                  <p>{{contestEntries.content1}}</p>
+              </div>
+              <div class="profile-form-item">
+                  <label>Picture :</label>
+                  <img [src]="contestEntries.contentImageUrl || 'https://via.placeholder.com/150'" class="profile-image">
+              </div>
+              <div class="profile-form-item">
+                  <label>SubmissionDate :</label>
+                  <p>{{contestEntries.submissionDate}}</p>
+              </div>
+          }
+      </div> 
+  </form>
+}

@@ -1,0 +1,26 @@
+
+  <div class="container">
+    <button pButton type="button" label="back" [routerLink]="['/admin/announcement'] "
+    class="custom-button"></button>
+      <div class="card card-warning" style="border-radius: 10px;">
+          <div class="card-header">
+              <h3 class="card-title">Add Content</h3>
+          </div>
+          <div class="card-body">
+              <form [formGroup]="addAnouncementForm" (ngSubmit)="save()">
+                  <div class="row">
+                      <div class="col-sm-6">
+                          <div class="form-group">
+                              <label>Content</label>
+                              <input type="text" formControlName="content" class="form-control" placeholder="Enter content...">
+                          </div>
+                          
+                      </div>
+                    
+                  </div>
+                  <button type="submit" class="btn btn-custom">Submit</button>
+              </form>
+          </div>
+      </div>
+  </div>
+  
